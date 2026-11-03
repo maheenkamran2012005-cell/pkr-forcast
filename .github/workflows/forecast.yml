@@ -1,0 +1,20 @@
+name: Run USD/PKR forecast
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  forecast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python forecast_usdpkr.py --data data/train_data_.xlsx --horizon 24
+      - uses: actions/upload-artifact@v4
+        with:
+          name: forecast-outputs
+          path: outputs/
